@@ -24,7 +24,8 @@ export default {
       const todo = {
         id: uuidv4(),
         title: this.newtodo,
-        status: false
+        status: false,
+        show: true
       }
 
       if(this.newtodo !== '') {

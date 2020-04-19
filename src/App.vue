@@ -16,7 +16,12 @@
     </ul>
 
     <!--Footer-->
-    <count-todo :todo-length="todos.length" v-show="todos.length" />
+    <count-todo 
+      :todos="todos" 
+      v-show="todos.length" 
+      @allShow="allShow"
+      @activeShow="activeShow"
+      @completeShow="completeShow"/>
   </div>
 </template>
 
@@ -30,8 +35,7 @@ import TodoItem from './components/TodoItem'
 export default {
   data() {
     return {
-      todos: [],
-      todosComplete: 0
+      todos: []
     }
   },
   components: {
@@ -41,7 +45,7 @@ export default {
   },
   methods: {
     newTodo(todo) {
-      this.todos.push(todo)
+      this.todos.push(todo) 
     },
     delTodo(id) {
       this.todos.splice(this.todos.findIndex(item => {
@@ -52,6 +56,31 @@ export default {
       this.todos.map(item => {
         if (id === item.id) {
           item.status = !item.status
+        }
+      })
+    },
+    allShow() {
+      this.todos.map(item => {
+        item.show = true
+        console.log(item.show)
+      })
+    },
+    activeShow() {
+      this.todos.map(item => {
+        if (item.status) {
+          item.show = false
+        } else {
+          item.show = true
+        }
+      })
+    },
+    completeShow() {
+      console.log('complete')
+      this.todos.map(item => {
+        if (item.status) {
+          item.show = true
+        } else {
+          item.show = false
         }
       })
     }

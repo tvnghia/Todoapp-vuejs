@@ -2,10 +2,10 @@
   <div>
     <ul class="list-group">
       <li class="list-group-item">
-        <span><strong>{{ todoLength }}</strong> item left</span>
-        <button type="button" class="btn btn-outline-primary">All</button>
-        <button type="button" class="btn btn-outline-primary">Active</button>
-        <button type="button" class="btn btn-outline-primary">Complete</button>
+        <span><strong>{{ todos | countLeft }}</strong> item left</span>
+        <button type="button" class="btn btn-outline-primary" @click="allShow">All</button>
+        <button type="button" class="btn btn-outline-primary" @click="activeShow">Active</button>
+        <button type="button" class="btn btn-outline-primary" @click="completeShow">Complete</button>
         <button type="button" class="btn btn-outline-primary">Clear</button>
       </li>
     </ul>
@@ -14,7 +14,23 @@
 
 <script>
 export default {
-  props: ['todoLength']
+  props: ['todos'],
+  filters: {
+    countLeft: function(value) {
+      return (value.filter(item => !item.status)).length
+    }
+  },
+  methods: {
+    allShow () {
+      this.$emit('allShow')
+    },
+    activeShow () {
+      this.$emit('activeShow')
+    },
+    completeShow () {
+      this.$emit('completeShow')
+    }
+  }
 }
 </script>
 

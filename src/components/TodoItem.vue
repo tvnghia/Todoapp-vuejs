@@ -1,5 +1,5 @@
 <template>
-  <li class="list-group-item">
+  <li class="list-group-item" v-show="todo.show">
     <span 
       :class="{ selected: todo.status }">
       <input type="checkbox" @change="changeInput(todo.id)">
