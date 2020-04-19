@@ -2,10 +2,13 @@
   <li class="list-group-item">
     <span 
       :class="{ selected: todo.status }">
-      <input type="checkbox" :checked="todo.status" @change="changeInput(todo.id)">
+      <input 
+        type="checkbox" 
+        :checked="todo.status" 
+        @change="toggleStatus(todo.id)" >
       {{ todo.title }}
     </span>
-    <button class="btn btn-warning" @click="delTodo(todo.id)">X</button>
+    <button class="btn btn-warning" @click="removeTodoItem(todo.id)">X</button>
   </li>
 </template>
 
@@ -13,12 +16,14 @@
 
 export default {
   props: ['todo'],
+
   methods: {
-    delTodo(id) {
-      this.$emit('delTodo', id)
+    removeTodoItem(id) {
+      this.$emit('removeTodoItem', id)
     },
-    changeInput(id) {
-      this.$emit('changeInput', id)
+
+    toggleStatus(id) {
+      this.$emit('toggleStatus', id)
     }
   }
 }

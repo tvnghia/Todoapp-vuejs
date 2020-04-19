@@ -3,7 +3,7 @@
     <h1>My Todo App!</h1>
 
     <!--Enter todo-->
-    <todo-list-input @createNew="newTodo" />
+    <todo-list-input @addNewTodoItem="todos.push($event)" />
 
     <!--List todo-->
     <ul class="list-group">
@@ -11,25 +11,23 @@
         v-for="todo in filterTodos"
         :key="todo.id"
         :todo="todo"
-        @delTodo="delTodo"
-        @changeInput="changeInput" />
+        @removeTodoItem="removeTodoItem"
+        @toggleStatus="toggleStatus" />
     </ul>
 
     <!--Footer-->
     <count-todo
-      :todos="todos" 
-      v-show="todos.length" 
+      :todos="todos"
+      v-show="todos.length"
       @onFilter="target = $event"
       @deleteAllDone="deleteAllDone" />
   </div>
 </template>
 
 <script>
-
 import TodoListInput from './components/TodoListInput'
 import CountTodo from './components/CountTodo'
 import TodoItem from './components/TodoItem'
-
 
 export default {
   data() {
@@ -38,10 +36,11 @@ export default {
       target: 'all'
     }
   },
+
   computed: {
     filterTodos: function() {
       let filter = this.todos
-      if (this.target === 'complete') {
+      if (this.target === 'completed') {
         filter = [...filter].filter(item => item.status)
       } else if (this.target === 'active') {
         filter = [...filter].filter(item => !item.status)
@@ -50,27 +49,29 @@ export default {
       return filter
     }
   },
+
   components: {
     TodoListInput,
     CountTodo,
     TodoItem
   },
+
   methods: {
-    newTodo(todo) {
-      this.todos.push(todo)
-    },
-    delTodo(id) {
-      this.todos.splice(this.todos.findIndex(item => {
+    removeTodoItem(id) {
+      const index = this.todos.findIndex(item => {
         return item.id === id
-      }), 1)
+      })
+      this.todos.splice(index, 1)
     },
-    changeInput(id) {
+
+    toggleStatus(id) {
       this.todos.map(todo => {
         if (todo.id === id) {
           todo.status = !todo.status
         }
       })
     },
+
     deleteAllDone() {
       this.todos = this.todos.filter(todo => !todo.status)
     }
@@ -83,10 +84,10 @@ export default {
   max-width: 500px;
   margin: 0 auto;
 }
+
 .list-group-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
 </style>
