@@ -4,7 +4,7 @@
       type="text" 
       v-model="newtodo"
       @keyup.13="createNew"
-      placeholder=" Add new todo">
+      placeholder=" Add new todo" >
   </div>
 </template>
 
@@ -24,8 +24,7 @@ export default {
       const todo = {
         id: uuidv4(),
         title: this.newtodo,
-        status: false,
-        show: true
+        status: false
       }
 
       if(this.newtodo !== '') {

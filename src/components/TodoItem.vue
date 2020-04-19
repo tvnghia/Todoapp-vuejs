@@ -1,8 +1,8 @@
 <template>
-  <li class="list-group-item" v-show="todo.show">
+  <li class="list-group-item">
     <span 
       :class="{ selected: todo.status }">
-      <input type="checkbox" @change="changeInput(todo.id)">
+      <input type="checkbox" :checked="todo.status" @change="changeInput(todo.id)">
       {{ todo.title }}
     </span>
     <button class="btn btn-warning" @click="delTodo(todo.id)">X</button>
@@ -16,7 +16,6 @@ export default {
   methods: {
     delTodo(id) {
       this.$emit('delTodo', id)
-
     },
     changeInput(id) {
       this.$emit('changeInput', id)

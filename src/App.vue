@@ -1,27 +1,26 @@
 <template>
   <div class="container-fluid text-center">
-    <h1>My Todo App</h1>
+    <h1>My Todo App!</h1>
 
     <!--Enter todo-->
     <todo-list-input @createNew="newTodo" />
 
     <!--List todo-->
     <ul class="list-group">
-      <todo-item 
-        v-for="(todo, index) in todos" 
-        :key="index"
+      <todo-item
+        v-for="todo in filterTodos"
+        :key="todo.id"
         :todo="todo"
         @delTodo="delTodo"
         @changeInput="changeInput" />
     </ul>
 
     <!--Footer-->
-    <count-todo 
+    <count-todo
       :todos="todos" 
       v-show="todos.length" 
-      @allShow="allShow"
-      @activeShow="activeShow"
-      @completeShow="completeShow"/>
+      @onFilter="target = $event"
+      @deleteAllDone="deleteAllDone" />
   </div>
 </template>
 
@@ -35,7 +34,20 @@ import TodoItem from './components/TodoItem'
 export default {
   data() {
     return {
-      todos: []
+      todos: [],
+      target: 'all'
+    }
+  },
+  computed: {
+    filterTodos: function() {
+      let filter = this.todos
+      if (this.target === 'complete') {
+        filter = [...filter].filter(item => item.status)
+      } else if (this.target === 'active') {
+        filter = [...filter].filter(item => !item.status)
+      }
+
+      return filter
     }
   },
   components: {
@@ -45,7 +57,7 @@ export default {
   },
   methods: {
     newTodo(todo) {
-      this.todos.push(todo) 
+      this.todos.push(todo)
     },
     delTodo(id) {
       this.todos.splice(this.todos.findIndex(item => {
@@ -53,36 +65,14 @@ export default {
       }), 1)
     },
     changeInput(id) {
-      this.todos.map(item => {
-        if (id === item.id) {
-          item.status = !item.status
+      this.todos.map(todo => {
+        if (todo.id === id) {
+          todo.status = !todo.status
         }
       })
     },
-    allShow() {
-      this.todos.map(item => {
-        item.show = true
-        console.log(item.show)
-      })
-    },
-    activeShow() {
-      this.todos.map(item => {
-        if (item.status) {
-          item.show = false
-        } else {
-          item.show = true
-        }
-      })
-    },
-    completeShow() {
-      console.log('complete')
-      this.todos.map(item => {
-        if (item.status) {
-          item.show = true
-        } else {
-          item.show = false
-        }
-      })
+    deleteAllDone() {
+      this.todos = this.todos.filter(todo => !todo.status)
     }
   }
 }

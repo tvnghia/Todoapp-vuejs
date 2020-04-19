@@ -3,10 +3,10 @@
     <ul class="list-group">
       <li class="list-group-item">
         <span><strong>{{ todos | countLeft }}</strong> item left</span>
-        <button type="button" class="btn btn-outline-primary" @click="allShow">All</button>
-        <button type="button" class="btn btn-outline-primary" @click="activeShow">Active</button>
-        <button type="button" class="btn btn-outline-primary" @click="completeShow">Complete</button>
-        <button type="button" class="btn btn-outline-primary">Clear</button>
+        <button type="button" class="btn btn-outline-primary" @click="onFilter('all')">All</button>
+        <button type="button" class="btn btn-outline-primary" @click="onFilter('active')">Active</button>
+        <button type="button" class="btn btn-outline-primary" @click="onFilter('complete')">Complete</button>
+        <button type="button" class="btn btn-outline-primary" @click="deleteAllDone">ClearDone</button>
       </li>
     </ul>
   </div>
@@ -21,14 +21,11 @@ export default {
     }
   },
   methods: {
-    allShow () {
-      this.$emit('allShow')
+    onFilter(target) {
+      this.$emit('onFilter', target)
     },
-    activeShow () {
-      this.$emit('activeShow')
-    },
-    completeShow () {
-      this.$emit('completeShow')
+    deleteAllDone() {
+      this.$emit('deleteAllDone')
     }
   }
 }
