@@ -9,7 +9,7 @@
 </template>
 <script>
 
-import { v4 as uuidv4 } from 'uuid'
+import database from '../firebase/firebase'
 
 export default {
   data() {
@@ -23,13 +23,25 @@ export default {
       if (this.todoTitle === '') return
 
       const todo = {
-        id: uuidv4(),
         title: this.todoTitle,
         status: false
       }
 
-      this.$emit('addNewTodoItem', todo)
-      this.todoTitle = ''
+      database.ref().push(todo)
+      
+      const arr = []
+      database.ref()
+        .once('value')
+        .then(snapshot => {
+          snapshot.forEach(childsnapshot => {
+            arr.push({
+              id: childsnapshot.key,
+              ...childsnapshot.val()
+            })
+          })
+          this.$emit('addNewTodoItem', arr)
+          this.todoTitle = ''
+        })  
     }
   }
 }

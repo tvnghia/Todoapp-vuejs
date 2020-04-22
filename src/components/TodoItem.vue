@@ -4,7 +4,7 @@
       :class="{ selected: todo.status }">
       <input 
         type="checkbox" 
-        :checked="todo.status" 
+        :checked="todo.status"
         @change="toggleStatus(todo.id)" >
       {{ todo.title }}
     </span>

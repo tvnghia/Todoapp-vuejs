@@ -3,7 +3,7 @@
     <h1>My Todo App!</h1>
 
     <!--Enter todo-->
-    <todo-list-input @addNewTodoItem="todos.push($event)" />
+    <todo-list-input @addNewTodoItem="todos=($event)" />
 
     <!--List todo-->
     <ul class="list-group">
@@ -28,11 +28,24 @@
 import TodoListInput from './components/TodoListInput'
 import CountTodo from './components/CountTodo'
 import TodoItem from './components/TodoItem'
+import database from './firebase/firebase'
+
+const arr = []
+database.ref()
+  .once('value')
+  .then(snapshot => {
+    snapshot.forEach(childsnapshot => {
+      arr.push({
+        id: childsnapshot.key,
+        ...childsnapshot.val()
+      })
+    })
+  })
 
 export default {
   data() {
     return {
-      todos: [],
+      todos: arr,
       target: 'all'
     }
   },
@@ -62,18 +75,29 @@ export default {
         return item.id === id
       })
       this.todos.splice(index, 1)
+      
+      database.ref(`${id}`).remove()
     },
 
     toggleStatus(id) {
       this.todos.map(todo => {
         if (todo.id === id) {
+          database.ref(`${id}`).update({
+            status: !todo.status
+          })
           todo.status = !todo.status
         }
       })
     },
 
     deleteAllDone() {
+      this.todos.map(todo => {
+        if (todo.status) {
+          database.ref(todo.id).remove()
+        }
+      })
       this.todos = this.todos.filter(todo => !todo.status)
+      
     }
   }
 }
