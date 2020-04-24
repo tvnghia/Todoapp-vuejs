@@ -29,10 +29,10 @@ export default {
 
       database.ref().push(todo)
       
-      const arr = []
       database.ref()
         .once('value')
         .then(snapshot => {
+          const arr = []
           snapshot.forEach(childsnapshot => {
             arr.push({
               id: childsnapshot.key,

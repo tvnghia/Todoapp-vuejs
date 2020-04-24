@@ -75,7 +75,6 @@ export default {
         return item.id === id
       })
       this.todos.splice(index, 1)
-      
       database.ref(`${id}`).remove()
     },
 
@@ -97,7 +96,6 @@ export default {
         }
       })
       this.todos = this.todos.filter(todo => !todo.status)
-      
     }
   }
 }
